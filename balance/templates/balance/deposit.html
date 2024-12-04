@@ -1,0 +1,393 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Balance</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+
+        .navbar {
+            background-color: #22b33a;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 400px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 60px; /* Adjusted margin to account for the fixed navbar */
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        p {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .balance {
+            color: {% if user.balance < 0 %}red{% else %}green{% endif %};
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .top-up-message {
+            color: red;
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+
+        .expiry-info {
+            margin-top: 15px;
+            color: #888;
+        }
+
+        #countdown {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .expired {
+            color: red;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+       
+    .container {
+        text-align: center; /* Center the content horizontally */
+    }
+
+    .container img {
+        width: 80px; /* Adjust the width as needed */
+        height: auto; /* Maintain the aspect ratio */
+    }
+
+
+  /* Centering the loader */
+  .loader-container, .col{
+     display: flex;
+     justify-content: center;
+     align-items: center;
+    
+   }
+   
+   /* Hide the checkmark initially */
+   #checkmark {
+     display: none;
+   }
+ 
+   /* Animated checkmark */
+   @keyframes checkmark {
+     0% {
+       stroke-dashoffset: -28;
+     }
+     100% {
+       stroke-dashoffset: 0;
+     }
+   }
+ 
+   #checkmark svg path {
+     fill: none;
+     stroke: #28a745;
+     stroke-width: 2;
+     stroke-linecap: round;
+     stroke-linejoin: round;
+     stroke-dasharray: 28;
+     stroke-dashoffset: -28;
+     animation: checkmark 0.6s ease-in-out forwards;
+   }
+   #btn_deposit {
+        width: 100%; /* Full width */
+        padding: 15px; /* Increased padding for a larger button */
+        background-color: #22b33a;
+        color: #ffffff; /* White text color */
+        font-size: 1.25rem; /* Larger text */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    #btn_deposit:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+</style>
+    </style>
+</head>
+<body>
+    <div class="navbar">
+       
+            
+        <a href="{% url 'balance:Contact' %}" >Contact</a>
+        <a href="#">Help</a>
+
+        <a href="{% url 'balance:home' %}">Logout</a>
+    </div>
+
+ 
+            <div class="col border bg-white d-flex justify-content-center align-items-center">
+               
+                {% if username == "Mark" %}
+               
+                    <div class="container mt-3 mpesa-form-container " >
+                        <div class="text-center">
+                            <img src="https://newsalert.co.ke/wp-content/uploads/2021/06/1200px-M-PESA_LOGO-01.svg-768x561.png" alt="M-Pesa" class="mpesa mpesa-logo">
+                        </div>
+                    
+                            <form action="post" id="deposit-form">
+                        
+                            
+                                        <div class="text">
+                                            <h4>Lipa na MPESA</h4>
+                                    </div>
+                                    
+                                        <div class="text">
+                                        
+                                            <input type="number" placeholder="Enter MPESA number" id="phone" name="phone" >
+                                    
+                                    
+                                            <input type="number" placeholder="Enter Amount" id="amount" name="amount" >
+                                        </div>
+                            
+                                <br>
+                                <div class="loader-container">
+                                    <div id="loading" class="spinner-border text-primary" role="status" style="display: none;">
+                                    <span class="visually-hidden"></span>
+                                    </div>
+                                    <div id="checkmark" class="text-success display-1" style="display: none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg"  width="40" height="40" viewBox="0 0 24 24">
+                                            <path d="M20 6L9 17l-5-5" fill="#c8e6c9"/>
+                                        </svg>
+                                    </div>
+                            
+                                </div> <br>
+                                <div class="text-center">
+                                    <button type="submit" id="btn_deposit" class="btn btn-success">Deposit</button>
+                                </div>
+                                <P>STK push will be sent to <span>your phone</span></P>
+                                <hr>
+                                            
+                            </form>
+                        
+                    </div> 
+
+                {% else %}
+                   <style>
+                       .paybill {
+                            background-color: #f9f9f9;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            padding: 20px;
+                            max-width: 400px;
+                            margin: 20px auto;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            font-family: Arial, sans-serif;
+                            color: #333;
+                        }
+
+                        .paybill-title {
+                            text-align: center;
+                            font-size: 20px;
+                            font-weight: bold;
+                            color: #4CAF50;
+                            margin-bottom: 10px;
+                        }
+
+                        .paybill-subtitle {
+                            text-align: center;
+                            font-size: 14px;
+                            color: #555;
+                            margin-bottom: 20px;
+                        }
+
+                        .paybill-item {
+                            font-size: 16px;
+                            margin-bottom: 15px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            cursor: pointer;
+                            transition: background-color 0.3s ease, color 0.3s ease;
+                        }
+
+                        .paybill-item:hover {
+                            background-color: #e8f5e9;
+                            color: #4CAF50;
+                            border-radius: 4px;
+                            padding: 5px;
+                        }
+
+                        .paybill-value {
+                            font-weight: bold;
+                            margin-left: 10px;
+                        }
+
+                        .paybill-copy {
+                            margin-left: 10px;
+                            color: #4CAF50;
+                        }
+
+                        .copy-text {
+                            font-size: 12px;
+                            margin-left: 5px;
+                            color: #999;
+                        }
+
+                        .paybill-note {
+                            text-align: center;
+                            font-size: 12px;
+                            color: #777;
+                            margin-top: 20px;
+                        }
+
+                   </style>
+              <div class="paybill">
+                <div class="text-center" style="display: flex; align-items: center; justify-content: center;">
+                    <img height="90px" src="https://newsalert.co.ke/wp-content/uploads/2021/06/1200px-M-PESA_LOGO-01.svg-768x561.png" alt="M-Pesa" class="mpesa mpesa-logo">
+                </div>
+             
+                <p class="paybill-subtitle">Use the following details:</p>
+                <p class="paybill-item" onclick="copyText('paybill')">
+                    <strong>Paybill:</strong> 
+                    <span id="paybill" class="paybill-value">{{ paybill }}</span>
+                    <span class="paybill-copy">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                        </svg>
+                    </span>
+                    <span class="copy-text">copy</span>
+                </p>
+                <p class="paybill-item" onclick="copyText('account')">
+                    <strong>Account:</strong> 
+                    <span id="account" class="paybill-value">{{ account }}</span>
+                    <span class="paybill-copy">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                        </svg>
+                    </span>
+                    <span class="copy-text">copy</span>
+                </p>
+                <p class="paybill-note">Tap or click the text to copy.</p>
+                <script>
+                    function copyText(elementId) {
+                        const text = document.getElementById(elementId).innerText;
+                        navigator.clipboard.writeText(text).then(() => {
+                            alert('Copied to clipboard: ' + text);
+                        }).catch(err => {
+                            alert('Failed to copy text: ' + err);
+                        });
+                    }
+                </script>
+
+            </div>
+            
+                
+                {% endif %}
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        
+        <script>
+            $(document).ready(function () {
+                $('#deposit-form').submit(function (event) {
+                    event.preventDefault(); // Prevent default form submission
+        
+                    // Get form data
+                    var amount = $('#amount').val();
+                    var phone = $('#phone').val();
+                  console.log(amount)
+                  console.log(phone)
+                  document.getElementById('loading').style.display = 'block';
+                    // Hide checkmark if it's already visible
+                    document.getElementById('checkmark').style.display = 'none';
+                    
+                    // Simulate loading for 3 seconds
+                    setTimeout(function() {
+                    // Hide loading spinner
+                    document.getElementById('loading').style.display = 'none';
+                    // Show checkmark
+                    document.getElementById('checkmark').style.display = 'block';
+                    }, 3000);
+                    // Send AJAX request
+                    $.ajax({
+                        type: 'POST',
+                        url: '/stkpush/', // Replace with your view URL
+                        data: {
+                            'amount': amount,
+                            'phone': phone,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}' // Add CSRF token for security
+                        },
+                                   
+                    });
+        
+                });
+        
+             
+            });
+        </script>
+  </div>
+
+
+</body>
+</html>
+
+
+

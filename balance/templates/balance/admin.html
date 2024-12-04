@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+<style>
+    /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 15px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+header h1 {
+    text-align: center;
+    color: #4CAF50;
+    margin-bottom: 15px;
+}
+
+/* Messages */
+.messages {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.messages li {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Toggle Buttons */
+.toggle-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.btn-toggle {
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.btn-toggle:hover {
+    background-color: #45a049;
+}
+
+/* Form Section */
+.form-section {
+    margin-bottom: 20px;
+}
+
+.form-table {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.form-table td {
+    padding: 8px;
+    vertical-align: middle;
+}
+
+button.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.btn:hover {
+    background-color: #45a049;
+}
+
+/* Balances Section */
+.balances-section {
+    overflow-x: auto;
+}
+
+.balances-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.balances-table th, .balances-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.balances-table th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.balances-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.balances-table tr:hover {
+    background-color: #f1f1f1;
+}
+/* Status Styles */
+.status {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.status.active {
+    background-color: #28a745; /* Green for active */
+}
+
+.status.expired {
+    background-color: #dc3545; /* Red for expired */
+}
+
+/* Other CSS remains the same */
+/* General styles for the table */
+.balances-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 20px;
+}
+.big{
+    display: block;
+}
+.small{
+    display: none;
+}
+
+.navbar {
+            background-color: #22b33a;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+        }
+/* Responsive Design for smaller screens */
+@media (max-width: 768px) {
+    .balances-table th, .balances-table td {
+        font-size: 12px;
+        padding: 6px;
+        word-wrap: break-word;
+    }
+
+    /* Ensure the first column stays fixed */
+    .balances-table th:first-child,
+    .balances-table td:first-child {
+        position: sticky;
+        left: 0;
+        background-color: #fff;  /* Ensure it blends well with the background */
+        z-index: 2;  /* Keep the first column above the rest */
+    }
+
+    /* Styling for the sticky column */
+    .balances-table th:first-child {
+        background-color: #f2f2f2; /* Optional background color for the header */
+        font-weight: bold;
+    }
+
+    /* Making the rest of the table scrollable */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 20px;
+    }
+
+    /* Adjust button and form styles */
+    .form-table td {
+        padding: 6px;
+    }
+
+    .btn-toggle {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+   
+
+    .small{
+        display: block;
+    }
+    .big{
+        display: none;
+    }
+}
+
+/* Desktop and larger devices */
+@media (min-width: 769px) {
+    .balances-table th, .balances-table td {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+
+</style>
+
+</head>
+<body>
+     
+    <div class="navbar">
+  
+       
+        <a href="{% url 'balance:home' %}">Home</a>
+        <a href="#">Register</a>
+        <a href="{% url 'balance:Contact' %}">Contact</a>
+        <a href="{% url 'balance:admin_login' %}">Admin</a>
+        
+        <form method="POST" action="{% url 'balance:logoutadmin' %}">
+            {% csrf_token %}
+            <button style="padding: 5px; cursor: pointer; color: white; border: none; background-color: red; border-radius: 5px; margin-top: 40px; width: 90px;" type="submit">Logout</button>
+        </form>
+        <marquee style="color: white; font-weight: bold; font-style: italic; margin-top: 9px;" direction="left">Welcome to Kelvin's technologies</marquee>
+    </div>
+    <div class="container" style="margin-top: 150px;">
+               
+     
+        <header>
+   
+            <h1>Admin Dashboard</h1>
+        </header>
+
+       
+
+        <!-- Toggle Buttons -->
+        <div class="toggle-buttons">
+            <button class="btn btn-toggle" onclick="filterBalances('all')">Show All</button>
+            <button class="btn btn-toggle" onclick="filterBalances('active')">Active Accounts</button>
+            <button class="btn btn-toggle" onclick="filterBalances('expired')">Expired Accounts</button>
+        </div>
+
+        <!-- Form Section -->
+        <section class="form-section" class="edit" style=" border-radius: 7px; padding: 14px; align-items: center; display: flex; flex-direction: column; background-color: #f2f2f2; border: #dc3545; border-radius: 0.7PX solid black; ">
+            <h2>{% if editing %}Edit User Account{% else %}Add New User{% endif %}</h2>
+            <form method="POST" style="width: 50%;">
+                {% csrf_token %}
+                <table class="form-table">
+                    {{ form.as_table }}
+                </table>
+                {% if editing %}
+                    <input type="hidden" name="save_id" value="{{ form.instance.id }}">
+                    <style>
+                         #edit{
+                            background-color: red;
+                            color: white;
+                         }
+                    </style>
+                {% endif %}
+                <button id="edit" style="width: 100%;" type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Save{% endif %}</button>
+          
+            </form>
+             <!-- Display messages -->
+      
+        </section>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <!-- Balances Section -->
+        <section class="balances-section">
+            <h2>Existing Accounts</h2>
+            <table class="balances-table" id="balances-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Balance</th>
+                        <th>Expiry Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for balance in balances %}
+                        <tr class="{% if balance.expiry_date > today %}active{% else %}expired{% endif %}">
+                            <td>{{ balance.username }}</td>
+                            {% if balance.balance >= 0 %}
+                               <td style="color: green;">{{ balance.balance }}</td>
+                            {% else %}
+                               <td style=" color: red;">{{ balance.balance }}</td>
+                            {% endif %}
+
+                            
+                            <td>{{ balance.expiry_date }}</td>
+                            <td class="big">
+                                {% if balance.expiry_date and balance.expiry_date > today %}
+                                    <span class="status active">Active</span>
+                                {% else %}
+                                    <span class="status expired">Expired</span>
+                                {% endif %}
+                            </td>
+                            <td class="small">
+                                {% if balance.expiry_date and balance.expiry_date > today %}
+                                    <span class="status active">Act</span>
+                                {% else %}
+                                    <span class="status expired">Exp</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="?edit_id={{ balance.id }}" class="btn btn-edit">Edit</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    
+                </tbody>
+
+            </table>
+        </section>
+    </div>
+
+    <script>
+        function filterBalances(filter) {
+            const rows = document.querySelectorAll("#balances-table tbody tr");
+            rows.forEach(row => {
+                if (filter === 'all') {
+                    row.style.display = '';
+                } else if (filter === 'active') {
+                    row.style.display = row.classList.contains('active') ? '' : 'none';
+                } else if (filter === 'expired') {
+                    row.style.display = row.classList.contains('expired') ? '' : 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Balance</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+
+        .navbar {
+            background-color: #22b33a;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 400px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 60px; /* Adjusted margin to account for the fixed navbar */
+        }
+
+        h2 {
+            color: #333;
+
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        p {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .balance {
+            color: {% if user.balance < 0 %}red{% else %}green{% endif %};
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .top-up-message {
+            color: red;
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+
+        .expiry-info {
+            margin-top: 15px;
+            color: #888;
+        }
+
+        #countdown {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .expired {
+            color: red;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        <style>
+    .container {
+        text-align: center; /* Center the content horizontally */
+    }
+
+    .container img {
+        width: 80px; /* Adjust the width as needed */
+        height: auto; /* Maintain the aspect ratio */
+    }
+</style>
+    </style>
+</head>
+<body>
+    <div class="navbar">
+       
+        <a href="{% url 'balance:deposit' %}" target="_blank">Deposit</a>
+        <a href="{% url 'balance:Contact' %}" >Contact</a>
+        <a href="#">Help</a>
+
+        <a href="{% url 'balance:home' %}">Logout</a>
+    </div>
+    <div class="container">
+        <img src="https://th.bing.com/th/id/R.022f90931b274a40ffa931bc4d0302fa?rik=hgjt9fsSI%2bGCtg&pid=ImgRaw" alt="Icon">
+    
+        <h3>Hello, {{ user.username }}!</h3>
+        <p>Your account balance is: <span class="balance">Ksh {{ user.balance }}</span></p>
+        
+        {% if user.balance < 0 %}
+            <div class="top-up-message">
+                <h4 style="color: black;">Please top up your account</h4>
+            </div>
+            <div class="container">
+                <a href="{% url 'balance:deposit' %}" target="_blank">Deposit</a>
+            </div>
+        {% endif %}
+
+        {% if user.expiry_date %}
+            <div class="expiry-info">
+                <p>Account Expiry Date: {{  user.expiry_date|date:"j F Y, g:i A" }}</p>
+                <p id="countdown" class="expired">Remaining time: </p> 
+                <input type="hidden" id="expiry-date" value="{{ user.expiry_date|date:'Y-m-d\TH:i:s' }}">
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Countdown MTimer
+        var countdownElement = document.getElementById('countdown');
+        var expiryDate = new Date(document.getElementById('expiry-date').value).getTime();
+
+        function updateCountdown() {
+            var now = new Date().getTime();
+            var timeRemaining = expiryDate - now;
+
+            if (timeRemaining > 0) {
+                var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+                countdownElement.innerHTML = `Time until expiry: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            } else {
+                countdownElement.innerHTML = 'Account expired! <br> The system will disconnect you soon!';
+                countdownElement.classList.add('expired');
+            }
+        }
+
+        // Update the countdown every second
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>

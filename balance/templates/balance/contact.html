@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Username</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+
+        .navbar {
+            background-color: #22b33a;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 400px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 60px; /* Adjusted margin to account for the fixed navbar */
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            color: red;
+        }
+
+        .error {
+            color: red;
+        }
+        .container img {
+        width: 80px; /* Adjust the width as needed */
+        height: auto; /* Maintain the aspect ratio */
+    }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{% url 'balance:home' %}">Home</a>
+        <a href="#">Register</a>
+        <a href="{% url 'balance:Contact' %}" >Contact</a>
+        <a href="#">Chat</a>
+        
+    </div>
+    <div class="container">
+        <img src="https://th.bing.com/th/id/R.022f90931b274a40ffa931bc4d0302fa?rik=hgjt9fsSI%2bGCtg&pid=ImgRaw" alt="Icon">
+    
+        <h3>Please contact us via the following:</h3>
+        <h5><span>Mark: </span>0799124080</h4>
+       
+          <p>or</p>
+            <h5> <span>Kelvin: </span>0705752300</h4>
+        
+    </div>
+    <script>
+        function ignoreSpaces() {
+            var usernameInput = document.getElementById('username');
+            usernameInput.value = usernameInput.value.trim();
+        }
+    </script>
+</body>
+</html>

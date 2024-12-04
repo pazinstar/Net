@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Balance</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+
+        .navbar {
+            background-color: #22b33a;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 400px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 60px; /* Adjusted margin to account for the fixed navbar */
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        p {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .balance {
+            color: {% if user.balance < 0 %}red{% else %}green{% endif %};
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .top-up-message {
+            color: red;
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+
+        .expiry-info {
+            margin-top: 15px;
+            color: #888;
+        }
+
+        #countdown {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .expired {
+            color: red;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+     
+
+
+    .container {
+        text-align: center; /* Center the content horizontally */
+    }
+
+    .container img {
+        width: 80px; /* Adjust the width as needed */
+        height: auto; /* Maintain the aspect ratio */
+    }
+
+  
+
+    #pay {
+        width: 100%; /* Full width */
+        padding: 15px; /* Increased padding for a larger button */
+        background-color: #22b33a;
+        color: #ffffff; /* White text color */
+        font-size: 1.25rem; /* Larger text */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    #pay:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+</style>
+    </style>
+</head>
+<body>
+    <div class="navbar">
+       
+        <a href="{% url 'balance:external_page' %}" target="_blank">Deposit</a>
+        <a href="{% url 'balance:Contact' %}" >Contact</a>
+        <a href="#">Help</a>
+
+        <a href="{% url 'balance:home' %}">Logout</a>
+    </div>
+    <div class="container">
+        <img src="https://th.bing.com/th/id/R.022f90931b274a40ffa931bc4d0302fa?rik=hgjt9fsSI%2bGCtg&pid=ImgRaw" alt="Icon">
+        <h2 class="mb-4">Superior wifi Payment</h2>
+        
+        <div class="container mt-5">
+          
+          <form class="row g-3">
+                <div class="col-md-6">
+                   
+                    <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number" required>
+                </div>
+                <div class="col-md-6">
+                   
+                    <input type="number" class="form-control" id="amount" placeholder="Enter amount" required>
+                </div>
+                <div class="col-12">
+                    <button type="submit" id="pay" >Pay Now</button>
+                </div>
+                
+            </form>
+        </div>
+        
+       
+    </div>
+
+</body>
+</html>
