@@ -5,6 +5,7 @@ set -e
 
 # Install dependencies
 pip install -r requirements.txt
+pip install gunicorn
 
 # Collect static files
 mkdir -p staticfiles
